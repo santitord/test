@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<!-- Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LBNB1HSVBZ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LBNB1HSVBZ');
+</script>
+<title>SANTITORD — IA Creative</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200;400;700;900&family=Libre+Baskerville:ital,wght@0,400;1,400&family=Martian+Mono:wght@300;400&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+:root {
+  --ink: #0a0a08;
+  --paper: #f2ede4;
+  --acid: #c8ff00;
+  --acid2: #ff3c00;
+  --muted: #8a8580;
+  --f-display: 'Unbounded', sans-serif;
+  --f-serif: 'Libre Baskerville', serif;
+  --f-mono: 'Martian Mono', monospace;
+}
+html { scroll-behavior: smooth; }
+body {
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--f-mono);
+  font-size: 13px;
+  overflow-x: hidden;
+  cursor: none;
+}
+#cur {
+  width: 12px; height: 12px;
+  background: var(--acid);
+  border-radius: 50%;
+  position: fixed; z-index: 9999;
+  pointer-events: none;
+  mix-blend-mode: difference;
+  transition: width .2s, height .2s, border-radius .2s;
+}
+body.hovering #cur { width:60px; height:60px; border-radius:4px; }
+body::after {
+  content:''; position:fixed; inset:0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.75' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.03'/%3E%3C/svg%3E");
+  pointer-events:none; z-index:9000;
+}
+nav {
+  position: fixed; top:0; left:0; right:0; z-index:500;
+  display:flex; justify-content:space-between; align-items:center;
+  padding: 20px 40px;
+  border-bottom: 1px solid rgba(242,237,228,.06);
+  backdrop-filter: blur(12px);
+  background: rgba(10,10,8,.7);
+}
+.nav-id {
+  font-family: var(--f-display);
+  font-weight: 900; font-size: .7rem;
+  letter-spacing: .08em; color: var(--acid);
+  text-decoration: none;
+}
+.nav-menu { display:flex; gap:32px; list-style:none; }
+.nav-menu a {
+  font-family: var(--f-mono); font-size: .6rem;
+  letter-spacing: .15em; text-transform: uppercase;
+  color: var(--muted); text-decoration:none;
+  transition: color .25s;
+}
+.nav-menu a:hover { color: var(--paper); }
+.nav-pill {
+  font-family: var(--f-mono); font-size: .55rem;
+  letter-spacing:.1em; padding: 6px 14px;
+  border: 1px solid var(--acid2); color: var(--acid2);
+  text-transform: uppercase; transition: all .25s;
+  text-decoration:none;
+}
+.nav-pill:hover { background: var(--acid2); color: var(--ink); }
+
+/* HERO */
+#hero {
+  min-height: 100vh;
+  padding: 100px 40px 60px;
+  display: flex; flex-direction:column; justify-content:flex-end;
+  position: relative; overflow:hidden;
+}
+.hero-mesh {
+  position:absolute; inset:0; z-index:0;
+  background:
+    radial-gradient(ellipse 55% 60% at 80% 20%, rgba(200,255,0,.07) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 10% 80%, rgba(255,60,0,.06) 0%, transparent 55%);
+  animation: meshPulse 8s ease-in-out infinite alternate;
+}
+@keyframes meshPulse {
+  0%  { filter: hue-rotate(0deg) brightness(1); }
+  100%{ filter: hue-rotate(15deg) brightness(1.1); }
+}
+.bg-text {
+  position:absolute; top:8%; left:0;
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-size: clamp(6rem, 18vw, 18rem);
+  color: rgba(242,237,228,.03);
+  white-space: nowrap; user-select:none;
+  animation: marqueeX 18s linear infinite;
+  letter-spacing: -.02em;
+}
+@keyframes marqueeX {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.hero-tag {
+  position:relative; z-index:1;
+  display:flex; align-items:center; gap:12px;
+  font-family: var(--f-mono); font-size: .58rem;
+  letter-spacing: .3em; text-transform: uppercase;
+  color: var(--acid); margin-bottom: 24px;
+}
+.hero-tag::before { content:''; width:40px; height:1px; background: var(--acid); }
+.hero-headline {
+  position:relative; z-index:1;
+  font-family: var(--f-display); font-weight: 900;
+  font-size: clamp(3.5rem, 10vw, 10rem);
+  line-height: .88; letter-spacing: -.03em;
+}
+.hero-headline .line { display:block; overflow:hidden; }
+.hero-headline .line span {
+  display:block;
+  transform: translateY(110%);
+  animation: slideUp .9s cubic-bezier(.16,1,.3,1) forwards;
+}
+.hero-headline .line:nth-child(1) span { animation-delay:.1s; }
+.hero-headline .line:nth-child(2) span { animation-delay:.22s; }
+.hero-headline .line:nth-child(3) span { animation-delay:.34s; }
+.accent-word { color: var(--acid); }
+.italic-word { font-family: var(--f-serif); font-weight:400; font-style:italic; font-size:.85em; }
+@keyframes slideUp { to { transform: translateY(0); } }
+.hero-bottom {
+  position:relative; z-index:1;
+  display: flex; justify-content:space-between; align-items:flex-end;
+  margin-top: 48px;
+}
+.hero-desc {
+  max-width: 380px; font-family: var(--f-mono);
+  font-size: .65rem; line-height: 2;
+  color: var(--muted); letter-spacing: .04em;
+}
+.hero-cta {
+  display: flex; align-items:center; gap:16px;
+  font-family: var(--f-display); font-weight: 700;
+  font-size: .85rem; letter-spacing: .06em;
+  color: var(--paper); text-decoration:none;
+  padding: 18px 32px; border: 2px solid var(--paper);
+  transition: all .3s; text-transform: uppercase;
+}
+.hero-cta:hover { background: var(--paper); color: var(--ink); }
+.hero-cta .arrow { transition: transform .3s; }
+.hero-cta:hover .arrow { transform: translateX(6px); }
+
+/* TICKER */
+.ticker {
+  border-top: 1px solid rgba(242,237,228,.08);
+  border-bottom: 1px solid rgba(242,237,228,.08);
+  padding: 14px 0; overflow:hidden; white-space:nowrap;
+}
+.ticker-inner {
+  display:inline-flex; gap:60px;
+  animation: marqueeX 25s linear infinite;
+  font-family: var(--f-mono); font-size: .58rem;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted);
+}
+.ticker-inner span { color: var(--acid); }
+
+/* BENTO */
+#work { padding: 80px 40px; }
+.section-header { display:flex; justify-content:space-between; align-items:flex-end; margin-bottom: 40px; }
+.section-num { font-family: var(--f-mono); font-size: .55rem; letter-spacing: .3em; color: var(--acid); text-transform: uppercase; }
+.section-title { font-family: var(--f-display); font-weight: 900; font-size: clamp(2.5rem, 5vw, 4.5rem); line-height: .9; letter-spacing:-.02em; }
+.section-sub { font-family: var(--f-mono); font-size: .58rem; color: var(--muted); letter-spacing: .1em; text-align:right; max-width: 200px; line-height:1.8; }
+.bento { display:grid; grid-template-columns: repeat(12, 1fr); gap: 12px; }
+.bcard {
+  position:relative; overflow:hidden;
+  background: #111110; border: 1px solid rgba(242,237,228,.06);
+  cursor:none; transition: border-color .3s;
+}
+.bcard:hover { border-color: rgba(200,255,0,.3); }
+.bcard-1 { grid-column: span 8; min-height: 420px; }
+.bcard-2 { grid-column: span 4; min-height: 420px; }
+.bcard-3 { grid-column: span 4; min-height: 300px; }
+.bcard-4 { grid-column: span 5; min-height: 300px; }
+.bcard-5 { grid-column: span 3; min-height: 300px; }
+.bcard-6 { grid-column: span 6; min-height: 260px; }
+.bcard-7 { grid-column: span 6; min-height: 260px; }
+.bvis { position:absolute; inset:0; transition: transform .7s cubic-bezier(.25,.46,.45,.94); }
+  .v1 { background-image: url('https://img.youtube.com/vi/kK-6h1ZB8h8/maxresdefault.jpg'); background-size:cover; background-position:center; }
+.v2 { background-image: url('https://img.youtube.com/vi/f_ge0nKMO-Y/maxresdefault.jpg'); background-size:cover; background-position:center; }
+.v3 { background-image: url('https://img.youtube.com/vi/MLwzY7zi_Qg/maxresdefault.jpg'); background-size:cover; background-position:center; }
+.v4 { background-image: url('https://img.youtube.com/vi/e5cpZOGCUms/maxresdefault.jpg'); background-size:cover; background-position:center; }
+.v5 { background-image: url('https://img.youtube.com/vi/pBpAf6XpSpo/maxresdefault.jpg'); background-size:cover; background-position:center; }
+.v6 { background-image: url('https://img.youtube.com/vi/ZirDmmeVnTY/maxresdefault.jpg'); background-size:cover; background-position:center; }
+.bcard:hover .bvis { transform: scale(1.04); }
+/* VIDEO PREVIEW */
+.bvideo {
+  position:absolute; inset:0; z-index:1;
+  width:100%; height:100%;
+  object-fit:cover;
+  opacity:0;
+  transition: opacity .5s ease;
+  pointer-events:none;
+}
+.bcard:hover .bvideo { opacity:1; }
+.bvideo-overlay {
+  position:absolute; inset:0; z-index:2;
+  background: linear-gradient(to top, rgba(10,10,8,.6) 0%, transparent 50%);
+  opacity:0; transition: opacity .5s;
+  pointer-events:none;
+}
+.bcard:hover .bvideo-overlay { opacity:1; }
+.binfo { position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding: 28px; background: linear-gradient(to top, rgba(10,10,8,.95) 0%, rgba(10,10,8,.3) 50%, transparent 100%); opacity:0; transition: opacity .35s .8s; }
+.bcard:hover .binfo { opacity:1; transition: opacity .35s; }
+.bcat { font-family: var(--f-mono); font-size: .52rem; letter-spacing: .25em; text-transform: uppercase; color: var(--acid); margin-bottom: 6px; }
+.btitle { font-family: var(--f-display); font-weight: 900; font-size: clamp(1.2rem, 2.5vw, 2rem); letter-spacing: -.01em; line-height: 1; }
+.bclient { font-family: var(--f-mono); font-size: .55rem; color: var(--muted); margin-top:6px; letter-spacing:.1em; }
+.blabel { position:absolute; top:20px; left:20px; font-family: var(--f-mono); font-size: .5rem; letter-spacing: .2em; color: rgba(242,237,228,.3); text-transform: uppercase; z-index:2; }
+.byear { position:absolute; top:20px; right:20px; font-family: var(--f-display); font-weight: 900; font-size: 1.8rem; color: rgba(242,237,228,.06); z-index:2; user-select:none; }
+
+/* NUMBERS */
+.numbers-strip { border-top: 1px solid rgba(242,237,228,.06); border-bottom: 1px solid rgba(242,237,228,.06); padding: 60px 40px; display:grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(242,237,228,.04); }
+.num-item { background: var(--ink); padding: 40px 36px; position:relative; overflow:hidden; }
+.num-item::before { content:''; position:absolute; top:0; left:0; right:0; height: 2px; background: linear-gradient(to right, var(--acid), transparent); transform: scaleX(0); transform-origin:left; transition: transform .5s; }
+.num-item:hover::before { transform: scaleX(1); }
+.num-n { font-family: var(--f-display); font-weight: 900; font-size: clamp(2.8rem, 5vw, 4.5rem); color: var(--paper); letter-spacing: -.03em; line-height:1; }
+.num-n sup { font-size:.5em; color: var(--acid); vertical-align:top; margin-top:.1em; }
+.num-label { font-family: var(--f-mono); font-size: .52rem; letter-spacing: .2em; text-transform: uppercase; color: var(--muted); margin-top:8px; }
+
+/* ABOUT */
+#about { padding: 100px 40px; display:grid; grid-template-columns: 1fr 1fr; gap:80px; border-top: 1px solid rgba(242,237,228,.06); }
+.about-statement { font-family: var(--f-display); font-weight: 200; font-size: clamp(2rem, 4vw, 3.5rem); line-height: 1.1; letter-spacing: -.02em; margin-top: 32px; }
+.about-statement strong { font-weight: 900; color: var(--acid); }
+.about-statement em { font-family: var(--f-serif); font-weight: 400; font-style: italic; color: var(--muted); }
+.about-right { padding-top: 60px; }
+.about-bio { font-family: var(--f-mono); font-size: .65rem; line-height: 2.2; color: rgba(242,237,228,.6); letter-spacing: .03em; margin-bottom:40px; }
+.skills-grid { display:grid; grid-template-columns:1fr 1fr; gap:2px; background: rgba(242,237,228,.04); border: 1px solid rgba(242,237,228,.06); }
+.skill-item { background: var(--ink); padding: 16px 20px; font-family: var(--f-mono); font-size: .55rem; letter-spacing: .15em; text-transform: uppercase; color: var(--muted); transition: all .25s; border: 1px solid transparent; }
+.skill-item:hover { color: var(--acid); border-color: rgba(200,255,0,.15); background: rgba(200,255,0,.02); }
+
+/* PROCESS */
+#process { padding: 100px 40px; border-top: 1px solid rgba(242,237,228,.06); }
+.process-grid { display:grid; grid-template-columns: repeat(4,1fr); gap:0; margin-top:60px; border: 1px solid rgba(242,237,228,.06); }
+.proc-item { padding: 40px 32px; border-right: 1px solid rgba(242,237,228,.06); position:relative; overflow:hidden; transition: background .3s; }
+.proc-item:last-child { border-right:none; }
+.proc-item:hover { background: rgba(200,255,0,.02); }
+.proc-num { font-family: var(--f-display); font-weight: 900; font-size: 3.5rem; color: rgba(200,255,0,.08); line-height:1; margin-bottom:24px; }
+.proc-name { font-family: var(--f-display); font-weight: 700; font-size: 1rem; letter-spacing: .04em; margin-bottom:12px; text-transform: uppercase; }
+.proc-desc { font-family: var(--f-mono); font-size: .58rem; line-height:2; color: var(--muted); letter-spacing: .04em; }
+
+/* CONTACT */
+#contact { padding: 120px 40px 80px; border-top: 1px solid rgba(242,237,228,.06); position:relative; overflow:hidden; }
+.contact-bg { position:absolute; inset:0; background: radial-gradient(ellipse 50% 70% at 80% 50%, rgba(200,255,0,.04) 0%, transparent 60%), radial-gradient(ellipse 40% 60% at 20% 50%, rgba(255,60,0,.04) 0%, transparent 60%); pointer-events:none; }
+.contact-big { font-family: var(--f-display); font-weight: 900; font-size: clamp(4rem, 12vw, 11rem); line-height: .85; letter-spacing: -.03em; position:relative; z-index:1; margin-bottom:60px; }
+.contact-big .sub { display:block; font-family: var(--f-serif); font-weight:400; font-style:italic; color: var(--muted); font-size:.45em; letter-spacing:.01em; }
+.contact-row { position:relative; z-index:1; display:flex; gap:60px; align-items:flex-end; flex-wrap:wrap; }
+.contact-links { display:flex; flex-direction:column; gap:1px; flex:1; }
+.clink { display:flex; justify-content:space-between; align-items:center; padding: 18px 0; border-bottom: 1px solid rgba(242,237,228,.08); text-decoration:none; color: var(--paper); transition: all .25s; }
+.clink:hover { padding-left:12px; border-bottom-color: var(--acid); }
+.clink-label { font-family: var(--f-mono); font-size: .55rem; letter-spacing: .25em; text-transform: uppercase; color: var(--muted); width: 90px; transition: color .25s; }
+.clink:hover .clink-label { color: var(--acid); }
+.clink-val { font-family: var(--f-display); font-weight: 400; font-size: .85rem; letter-spacing: .02em; }
+.clink-arr { color: var(--acid); font-size:.9rem; opacity:0; transition: opacity .25s, transform .25s; }
+.clink:hover .clink-arr { opacity:1; transform:translateX(4px); }
+
+footer { padding: 28px 40px; border-top: 1px solid rgba(242,237,228,.06); display:flex; justify-content:space-between; align-items:center; }
+.foot-copy { font-family: var(--f-mono); font-size: .52rem; letter-spacing: .15em; color: rgba(242,237,228,.2); text-transform: uppercase; }
+.foot-built { font-family: var(--f-mono); font-size: .52rem; letter-spacing: .1em; color: rgba(242,237,228,.15); }
+.foot-built span { color: var(--acid); }
+
+.rv { opacity:0; transform:translateY(32px); transition: opacity .9s ease, transform .9s ease; }
+.rv.on { opacity:1; transform:translateY(0); }
+
+@media (max-width:860px) {
+  nav { padding:16px 20px; }
+  .nav-menu { display:none; }
+  #hero { padding: 80px 20px 50px; }
+  #work { padding: 60px 20px; }
+  .bento { grid-template-columns:1fr 1fr; }
+  .bcard-1,.bcard-2 { grid-column:span 2; min-height:280px; }
+  .bcard-3,.bcard-4,.bcard-5 { grid-column:span 1; min-height:220px; }
+  .bcard-6,.bcard-7 { grid-column:span 1; min-height:200px; }
+  #about { grid-template-columns:1fr; padding:60px 20px; gap:40px; }
+  .numbers-strip { grid-template-columns:1fr 1fr; padding:40px 20px; }
+  #process { padding:60px 20px; }
+  .process-grid { grid-template-columns:1fr 1fr; }
+  #contact { padding:80px 20px 60px; }
+  footer { padding:20px; flex-direction:column; gap:8px; text-align:center; }
+  .section-header { flex-direction:column; align-items:flex-start; gap:16px; }
+  .hero-bottom { flex-direction:column; gap:32px; align-items:flex-start; }
+}
+</style>
+</head>
+<body>
+<div id="cur"></div>
+
+<nav>
+  <a href="#" class="nav-id">ST—</a>
+  <ul class="nav-menu">
+    <li><a href="#work">Trabajos</a></li>
+    <li><a href="#about">Sobre mí</a></li>
+    <li><a href="#process">Proceso</a></li>
+    <li><a href="#contact">Contacto</a></li>
+  </ul>
+  <a href="#contact" class="nav-pill">Disponible ↗</a>
+</nav>
+
+<section id="hero">
+  <div class="hero-mesh"></div>
+  <div class="bg-text">REDACTOR CREATIVO — DIRECCIÓN DE ARTE — IA — HUMOR — CONTENIDO — CAMPAÑAS — REDACTOR CREATIVO — DIRECCIÓN DE ARTE — IA — HUMOR — CONTENIDO — CAMPAÑAS — &nbsp;REDACTOR CREATIVO — DIRECCIÓN DE ARTE — IA — HUMOR — CONTENIDO — CAMPAÑAS — &nbsp;</div>
+  <div class="hero-tag">La Plata, Buenos Aires — Disponible remoto</div>
+  <h1 class="hero-headline">
+    <span class="line"><span>SANTI</span></span>
+    <span class="line"><span><em class="italic-word">TORD</em></span></span>
+    <span class="line"><span class="accent-word">CREATIVO</span></span>
+  </h1>
+  <div class="hero-bottom">
+    <p class="hero-desc">
+      Campaña. Concepto. Ejecución.<br>
+      Redacción y dirección de arte con IA integrada al proceso.<br>
+     Ideas que cortan el scroll. Comunicación que le habla fácil a la gente en un mundo donde todo compite por su atención.<br>
+    </p>
+    <a href="#work" class="hero-cta">Ver trabajos <span class="arrow">→</span></a>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-inner">
+    <span>★</span> Dirección Creativa <span>★</span> Campañas 360° <span>★</span> Branding con IA <span>★</span> Contenido Digital <span>★</span> Producción <span>★</span> Estrategia Visual &nbsp;&nbsp;&nbsp;
+    <span>★</span> Dirección Creativa <span>★</span> Campañas 360° <span>★</span> Branding con IA <span>★</span> Contenido Digital <span>★</span> Producción <span>★</span> Estrategia Visual &nbsp;&nbsp;&nbsp;
+  </div>
+</div>
+
+<section id="work">
+  <div class="section-header rv">
+    <div>
+      <div class="section-num">01 — Portfolio</div>
+      <h2 class="section-title">TRABAJOS<br>SELECCIONADOS</h2>
+    </div>
+    <p class="section-sub">Campañas ejecutadas con precisión estratégica y visión creativa</p>
+  </div>
+  <div class="bento rv" style="transition-delay:.3s">
+    <div class="bcard bcard-1" onclick="openProject(0)">
+      <div class="bvis v1"><div class="v1-lines"></div></div>
+     <iframe class="bvideo" src="https://player.vimeo.com/video/1172237382" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="bvideo-overlay"></div>
+      <div class="blabel">Digital</div><div class="byear">24</div>
+      <div class="binfo"><div class="bcat">Film Publicitario</div><div class="btitle">Whisky Ballantines</div><div class="bclient">Ballantines · Producción HAMBRE · 2025</div></div>
+    </div>
+    <div class="bcard bcard-2" onclick="openProject(1)">
+      <div class="bvis v2"><div class="v2-circle"></div></div>
+     <iframe class="bvideo" src="https://player.vimeo.com/video/1172238818" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="bvideo-overlay"></div>
+      <div class="blabel">Digital</div><div class="byear">24</div>
+      <div class="binfo"><div class="bcat">Spot redes</div><div class="btitle">TRAMPA</div><div class="bclient">Trampa.ar · 2025</div></div>
+    </div>
+    <div class="bcard bcard-3" onclick="openProject(2)">
+      <div class="bvis v3"></div>
+     <iframe class="bvideo" src="https://player.vimeo.com/video/1172237860" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="bvideo-overlay"></div>
+      <div class="blabel">Digital</div><div class="byear">23</div>
+      <div class="binfo"><div class="bcat">Lanzamiento de producto</div><div class="btitle">Beldent</div><div class="bclient">Beldent Limón Ácido · 2024</div></div>
+    </div>
+    <div class="bcard bcard-4" onclick="openProject(3)">
+      <div class="bvis v4"><div class="v4-grid"></div><div class="v4-dot"></div></div>
+     <iframe class="bvideo" src="https://player.vimeo.com/video/1172238180" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="bvideo-overlay"></div>
+      <div class="blabel">Digital</div><div class="byear">23</div>
+      <div class="binfo"><div class="bcat">Spot Concepto</div><div class="btitle">Adidas</div><div class="bclient">Adidas Nothing Is Impossible· 2024</div></div>
+    </div>
+    <div class="bcard bcard-5" onclick="openProject(4)">
+      <div class="bvis v5"></div>
+     <iframe class="bvideo" src="https://www.youtube.com/embed/pBpAf6XpSpo?autoplay=0&mute=1" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="bvideo-overlay"></div>
+      <div class="blabel">Film</div><div class="byear">23</div>
+      <div class="binfo"><div class="bcat">Film Publicitario</div><div class="btitle">Ansake</div><div class="bclient">Ansake.ar · 2024</div></div>
+    </div>
+    <div class="bcard bcard-6" onclick="openProject(5)">
+      <div class="bvis v6"></div>
+      <iframe class="bvideo" src="https://player.vimeo.com/video/1172239339" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+      <div class="bvideo-overlay"></div>
+      <div class="blabel">360°</div><div class="byear">22</div>
+      <div class="binfo"><div class="bcat">Producción IA</div><div class="btitle">Kinder</div><div class="bclient">Kinder EasterDay · 2026</div></div>
+    </div>
+   
+</section>
+
+
+<section id="about">
+  <div class="rv">
+    <div class="section-num">02 — Sobre mí</div>
+    <h2 class="about-statement">
+      La IA no<br><strong>reemplaza</strong><br>la <em>creatividad</em>.<br>La <strong>amplifica</strong>.
+    </h2>
+  </div>
+  <div class="about-right rv" style="transition-delay:.15s">
+    <p class="about-bio">
+      Soy creativo publicitario de La Plata con foco en redacción y dirección de arte.<br><br>
+      Trabajo con IA — Higgsfield, Kling, NanoBanana, Claude — no para reemplazar la idea, sino para ejecutarla más rápido y más lejos.<br><br>
+      Me especializo en contenido que para el scroll. Consumo tendencias de forma compulsiva, encuentro los baches donde puede ser rica la comunicación, y propongo ideas que van un poco más allá de lo esperado.<br><br>
+      Creo que hoy hay que hablarle fácil a la gente. Tiene mil cosas para ver al mismo tiempo. Si no la enganchás en los primeros segundos, perdiste. Eso es lo que tengo en la cabeza cada vez que arranco un proyecto.
+    </p>
+    <div class="skills-grid">
+      <div class="skill-item">Dirección Creativa</div>
+      <div class="skill-item">Campañas 360°</div>
+      <div class="skill-item">Branding / Identidad</div>
+      <div class="skill-item">Dirección de Arte IA</div>
+      <div class="skill-item">Contenido Digital</div>
+      <div class="skill-item">Estrategia Visual</div>
+      <div class="skill-item">Film Publicitario</div>
+      <div class="skill-item">Consultoría Creativa</div>
+    </div>
+  </div>
+</section>
+
+<section id="process">
+  <div class="section-header rv">
+    <div>
+      <div class="section-num">03 — Proceso</div>
+      <h2 class="section-title">CÓMO<br>TRABAJO</h2>
+    </div>
+  </div>
+  <div class="process-grid rv" style="transition-delay:.1s">
+    <div class="proc-item"><div class="proc-num">01</div><div class="proc-name">Concepto</div><div class="proc-desc">Arranco con la idea. Sin historia que contar, no hay campaña que valga.</div></div>
+    <div class="proc-item"><div class="proc-num">02</div><div class="proc-name">Redacción</div><div class="proc-desc">Escribo el guión, la voz en off, el tagline. El copy es la columna vertebral de todo lo que hago.</div></div>
+    <div class="proc-item"><div class="proc-num">03</div><div class="proc-name">Producción</div><div class="proc-desc">Ejecuto con IA — prompts, generación de imágenes, video y edición. De la idea al producto terminado.</div></div>
+    <div class="proc-item"><div class="proc-num">04</div><div class="proc-name">Entrega</div><div class="proc-desc">Pieza lista para publicar. Con concepto, racional creativo y copy integrado desde el primer boceto.</div></div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="contact-bg"></div>
+  <div class="rv">
+    <h2 class="contact-big">HABLEMOS<span class="sub">de tu próximo proyecto</span></h2>
+  </div>
+  <div class="contact-row rv" style="transition-delay:.1s">
+    <div class="contact-links">
+     <a href="/cdn-cgi/l/email-protection#77041619031e1610185903180513121b1b1e37101a161e1b5914181a" class="clink">
+    <span class="clink-label">Email</span><span class="clink-val"><span class="__cf_email__" data-cfemail="cbb8aaa5bfa2aaaca4e5bfa4b9afaea7a7a28baca6aaa2a7e5a8a4a6">[email&#160;protected]</span></span><span class="clink-arr">↗</span>
+</a>
+      <a href="https://linkedin.com/in/santiagotordelli" class="clink">
+        <span class="clink-label">LinkedIn</span><span class="clink-val">linkedin.com/in/santiagotordelli</span><span class="clink-arr">↗</span>
+      </a>
+      <a href="https://instagram.com/santitord" class="clink">
+        <span class="clink-label">Instagram</span><span class="clink-val">@santitord</span><span class="clink-arr">↗</span>
+      </a>
+      <a href="https://behance.net/santiagotordelli" class="clink">
+        <span class="clink-label">Behance</span><span class="clink-val">behance.net/santitord</span><span class="clink-arr">↗</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-copy">© 2026 Santitord. Buenos Aires, AR</div>
+  <div class="foot-built">Construido con <span>IA</span> + criterio humano</div>
+</footer>
+
+<div id="modal" style="position:fixed;inset:0;z-index:800;background:rgba(10,10,8,.97);display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .35s;">
+  <div style="max-width:720px;width:90%;position:relative;">
+    <button onclick="closeProject()" style="position:absolute;top:-44px;right:0;background:none;border:none;font-family:var(--f-mono);font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;color:var(--muted);cursor:none;display:flex;align-items:center;gap:10px;">ESC — CERRAR <span style="color:var(--acid);font-size:1.2rem;">×</span></button>
+    <div id="mvis" style="width:100%;aspect-ratio:16/9;position:relative;overflow:hidden;"></div>
+    <div style="padding:32px 0 0;">
+      <div id="mcat" style="font-family:var(--f-mono);font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;color:var(--acid);margin-bottom:8px;"></div>
+      <div id="mtitle" style="font-family:var(--f-display);font-weight:900;font-size:2.2rem;letter-spacing:-.02em;margin-bottom:12px;"></div>
+      <div id="mdesc" style="font-family:var(--f-mono);font-size:.62rem;line-height:2;color:rgba(242,237,228,.55);letter-spacing:.03em;"></div>
+    </div>
+  </div>
+</div>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+const cur = document.getElementById('cur');
+document.addEventListener('mousemove', e => { cur.style.left = e.clientX-6+'px'; cur.style.top = e.clientY-6+'px'; });
+document.querySelectorAll('a,button,.bcard').forEach(el => {
+  el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+  el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+});
+const obs = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting) e.target.classList.add('on'); }), {threshold:.1});
+document.querySelectorAll('.rv').forEach(el => obs.observe(el));
+
+// VIDEO PREVIEW — hover muestra iframe
+document.querySelectorAll('.bcard').forEach(card => {
+  const iframe = card.querySelector('.bvideo');
+  if (!iframe) return;
+  card.addEventListener('mouseenter', () => {
+    iframe.style.opacity = '1';
+  });
+  card.addEventListener('mouseleave', () => {
+    iframe.style.opacity = '0';
+  });
+});
+const projects = [
+  { cat:'Spot Facultativo · 2025', title:'BALLANTINES WHISKY', vis:'linear-gradient(135deg,#0d0d00,#1a1a00,#0a0a08)', video:'https://player.vimeo.com/video/1172237382', desc:'Spot de 45 segundos ambientado en una cafetería de época. Una mujer sola, dos mujeres que la boicotean, y un hombre en la barra con su whisky. La tensión crece hasta el giro final: toda la disputa no era por él, sino por la botella de Ballantines. Humor, narrativa y producto integrado de forma orgánica.' },
+  { cat:'Spot Facultativo · 2025', title:'TRAMPA', vis:'linear-gradient(135deg,#0a0008,#130010,#080808)', video:'https://player.vimeo.com/video/1172238818', desc:'Spot de 30 segundos para marca de indumentaria platense. Un protagonista con los ojos vendados en medio de una fiesta descontrolada. Una voz le dice "todo ha sido una trampa" y despierta baboseado en su escritorio, vestido de oficina, sin entender nada. En su mano: un pañuelo con el nombre de la marca. Sueño surrealista, despertar abrupto, branding integrado al concepto.' },
+  { cat:'Spot Facultativo · 2024', title:'BELDENT LIMÓN ÁCIDO', vis:'linear-gradient(135deg,#1a1a00,#0d0d00,#001018)', video:'https://player.vimeo.com/video/1172237860', desc:'Spot con voz en off en tercera persona para el lanzamiento del chicle Beldent Limón Ácido. El protagonista atraviesa una seguidilla de situaciones absurdas: dos obreros con un vidrio gigante le cortan el paso, un perro le hace pis desde un balcón, se le va el colectivo. Tagline final: "Beldent Limón Ácido, para personas sin pelos en la lengua." Humor costumbrista argentino con cierre en locación real.' },
+  { cat:'Spot Facultativo · 2024', title:'ADIDAS — NOTHING IS IMPOSSIBLE', vis:'linear-gradient(135deg,#0f0f08,#1a1a08)', video:'https://player.vimeo.com/video/1172238180', desc:'Spot motivacional de 20 segundos para Adidas. Un hombre suena el despertador, lo apaga, se pone el gorro, se ata las zapatillas y sale a correr. Sin diálogos, sin efectos. Solo acción, ritmo y el claim final de la marca. Ejercicio de dirección de arte con foco en el lenguaje visual minimalista de Adidas.' },
+  { cat:'Spot Facultativo · 2024', title:'ANSAKE', vis:'linear-gradient(135deg,#0a0000,#180500)', video:'https://www.youtube.com/embed/pBpAf6XpSpo?enablejsapi=1', desc:'Spot para marca de indumentaria platense. Un tipo con pasamontañas fuerza la entrada a un local, todo desde el punto de vista de una cámara de seguridad. Cuando encuentra el conjunto que busca lo pone sobre la mesa y colapsa. El concepto gira en torno a la rumiación: ese deseo compulsivo de querer algo ya. El cierre son planos detalle del producto.' },
+  { cat:'Spot Full IA · 2026', title:'KINDER EASTER DAY', vis:'linear-gradient(135deg,#0c0c10,#10101a)', video:'https://player.vimeo.com/video/1172239339', desc:'Spot 100% generado con inteligencia artificial para Kinder Huevo. Imágenes con NanoBanana, video con Kling y voz en off. Dos conejos descubren una cueva con un glow dorado que los lleva a un mundo chocolatoso estilo Willy Wonka. Un cofre, una transición y el huevo Kinder aparece girando en cámara. Claim final: "Kinder Huevo, el sabor que hace magia." Primera pieza full IA del portfolio.' }
+];
+  
+function openProject(i) {
+  const p=projects[i];
+  document.getElementById('mvis').style.background=p.vis;
+  document.getElementById('mcat').textContent=p.cat;
+  document.getElementById('mtitle').textContent=p.title;
+  document.getElementById('mdesc').textContent=p.desc;
+  // Inyectar iframe del video
+  const mvis = document.getElementById('mvis');
+  if(p.video) {
+    mvis.innerHTML = '<iframe src="'+p.video+'?autoplay=1&title=0&byline=0&portrait=0" style="position:absolute;inset:0;width:100%;height:100%;border:0;" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>';
+  } else {
+    mvis.innerHTML = '';
+  }
+  const m=document.getElementById('modal');
+  m.style.opacity='1'; m.style.pointerEvents='all';
+  document.body.style.overflow='hidden';
+}
+function closeProject() {
+  const m=document.getElementById('modal');
+  m.style.opacity='0'; m.style.pointerEvents='none';
+  document.body.style.overflow='';
+  document.getElementById('mvis').innerHTML='';
+}
+document.getElementById('modal').addEventListener('click', e => { if(e.target===document.getElementById('modal')) closeProject(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeProject(); });
+</script>
+</body>
+</html>
