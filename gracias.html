@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Gracias por tu Reserva! - Studio Rental</title>
+    <meta name="description" content="Confirmación de reserva y próximo paso para tu alquiler de equipos profesionales.">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@300;400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Custom Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'ink': '#0a0a0b',
+                        'acid': '#c8ff00',
+                        'acid-hover': '#e6ff33',
+                        'muted': '#8a8580',
+                        'paper': '#f2ede4'
+                    },
+                    fontFamily: {
+                        'display': ['Unbounded', 'sans-serif'],
+                        'body': ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #0a0a0b;
+            color: #f2ede4;
+            font-family: 'Inter', sans-serif;
+        }
+        
+        .success-gradient {
+            background: radial-gradient(ellipse 80% 60% at 20% 20%, rgba(200, 255, 0, 0.1), transparent 60%),
+                        radial-gradient(ellipse 60% 80% at 80% 80%, rgba(255, 60, 0, 0.08), transparent 60%);
+        }
+        
+        .btn-acid {
+            background-color: #c8ff00;
+            color: #0a0a0b;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-acid:hover {
+            background-color: #e6ff33;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(200, 255, 0, 0.4);
+        }
+        
+        .btn-outline {
+            border: 2px solid #c8ff00;
+            color: #c8ff00;
+            background: transparent;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-outline:hover {
+            background-color: #c8ff00;
+            color: #0a0a0b;
+        }
+        
+        .success-icon {
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-ink/80 backdrop-blur-md border-b border-ink/20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center py-4">
+                <a href="index.html" class="text-2xl font-bold text-acid font-display">STUDIO RENTAL</a>
+                <div class="hidden md:flex items-center space-x-4">
+                    <span class="text-sm text-muted">+54 9 11 1234-5678</span>
+                    <a href="index.html#contacto" class="btn-outline px-6 py-2 rounded-full text-sm">
+                        Contacto
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Success Section -->
+    <section class="min-h-screen flex items-center justify-center success-gradient relative overflow-hidden">
+        <div class="absolute inset-0 bg-gradient-to-b from-transparent to-ink"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div class="success-icon mb-8">
+                <div class="w-24 h-24 bg-acid rounded-full mx-auto mb-6 flex items-center justify-center shadow-2xl">
+                    <span class="text-4xl">✅</span>
+                </div>
+            </div>
+            
+            <h1 class="text-5xl md:text-6xl font-bold text-white font-display mb-6">
+                ¡Reserva Exitosa!
+            </h1>
+            
+            <p class="text-xl text-muted mb-8 max-w-2xl mx-auto">
+                Tu seña ha sido procesada con éxito. Estamos procesando tu reserva y nos pondremos en contacto contigo para confirmar los detalles.
+            </p>
+            
+            <div class="bg-white/5 backdrop-blur-sm border border-ink/30 rounded-2xl p-8 mb-8">
+                <h2 class="text-2xl font-bold text-white mb-4">Próximos Pasos</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-acid/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-acid text-xl">📧</span>
+                        </div>
+                        <h3 class="font-semibold text-white mb-2">Confirmación</h3>
+                        <p class="text-muted text-sm">Recibirás un email con la confirmación de tu reserva en las próximas 24 horas</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-acid/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-acid text-xl">📞</span>
+                        </div>
+                        <h3 class="font-semibold text-white mb-2">Contacto</h3>
+                        <p class="text-muted text-sm">Nos comunicaremos contigo para coordinar la entrega y retirar el equipo</p>
+                    </div>
+                    <div class="text-center">
+                        <div class="w-12 h-12 bg-acid/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <span class="text-acid text-xl">📦</span>
+                        </div>
+                        <h3 class="font-semibold text-white mb-2">Entrega</h3>
+                        <p class="text-muted text-sm">Entregamos en todo el área metropolitana en la fecha acordada</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-x-4">
+                <a href="index.html" class="btn-acid px-8 py-4 text-lg rounded-full hover:shadow-lg transform hover:scale-105 transition-all">
+                    Volver al Catálogo
+                </a>
+                <a href="index.html#contacto" class="btn-outline px-8 py-4 text-lg rounded-full">
+                    Contactarnos
+                </a>
+            </div>
+        </div>
+        
+        <!-- Decorative Elements -->
+        <div class="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-ink to-transparent"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-ink">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-white font-display mb-4">¿Necesitás Otro Equipo?</h2>
+                <p class="text-muted text-lg">Explora nuestro catálogo completo de equipos profesionales</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white/5 backdrop-blur-sm border border-ink/30 rounded-2xl p-6 text-center hover:bg-white/10 transition-all">
+                    <div class="w-16 h-16 bg-acid/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-acid text-2xl">🎥</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Cámaras</h3>
+                    <p class="text-muted mb-4">Full frame, mirrorless, cine y más. Equipos de última generación para cualquier tipo de producción.</p>
+                    <a href="index.html#catalogo" class="btn-outline px-6 py-2 rounded-full text-sm inline-block">Ver Cámaras</a>
+                </div>
+                
+                <div class="bg-white/5 backdrop-blur-sm border border-ink/30 rounded-2xl p-6 text-center hover:bg-white/10 transition-all">
+                    <div class="w-16 h-16 bg-acid/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-acid text-2xl">💡</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Iluminación</h3>
+                    <p class="text-muted mb-4">Kits completos, luces LED, softboxes, reflectores y todo lo necesario para iluminar tu producción.</p>
+                    <a href="index.html#catalogo" class="btn-outline px-6 py-2 rounded-full text-sm inline-block">Ver Iluminación</a>
+                </div>
+                
+                <div class="bg-white/5 backdrop-blur-sm border border-ink/30 rounded-2xl p-6 text-center hover:bg-white/10 transition-all">
+                    <div class="w-16 h-16 bg-acid/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-acid text-2xl">🔧</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white mb-2">Accesorios</h3>
+                    <p class="text-muted mb-4">Tripodes, sliders, grips, baterías, memorias y todo lo que necesitás para tu equipo.</p>
+                    <a href="index.html#catalogo" class="btn-outline px-6 py-2 rounded-full text-sm inline-block">Ver Accesorios</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-ink border-t border-ink/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="md:col-span-2">
+                    <h3 class="text-2xl font-bold text-acid font-display mb-4">STUDIO RENTAL</h3>
+                    <p class="text-muted mb-6 max-w-md">Tu partner de confianza para producciones profesionales. Equipos de última generación, atención personalizada y soluciones a medida para cada proyecto.</p>
+                    <div class="flex space-x-4">
+                        <span class="text-sm text-muted">Seguinos:</span>
+                        <a href="#" class="text-acid hover:text-white transition-colors">Instagram</a>
+                        <a href="#" class="text-acid hover:text-white transition-colors">LinkedIn</a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Servicios</h4>
+                    <ul class="space-y-2 text-muted">
+                        <li><a href="index.html#catalogo" class="hover:text-acid transition-colors">Alquiler de cámaras</a></li>
+                        <li><a href="index.html#catalogo" class="hover:text-acid transition-colors">Alquiler de iluminación</a></li>
+                        <li><a href="index.html#catalogo" class="hover:text-acid transition-colors">Accesorios y soportes</a></li>
+                        <li><a href="index.html#contacto" class="hover:text-acid transition-colors">Asesoramiento técnico</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-white font-semibold mb-4">Legal</h4>
+                    <ul class="space-y-2 text-muted">
+                        <li><a href="#" class="hover:text-acid transition-colors">Términos y Condiciones</a></li>
+                        <li><a href="#" class="hover:text-acid transition-colors">Política de Privacidad</a></li>
+                        <li><a href="#" class="hover:text-acid transition-colors">Preguntas Frecuentes</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-ink/30 mt-8 pt-8 text-center text-muted">
+                <p>&copy; 2024 Studio Rental. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Add some interactivity
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add confetti effect on load
+            const successIcon = document.querySelector('.success-icon');
+            if (successIcon) {
+                // Simple animation trigger
+                setTimeout(() => {
+                    successIcon.style.animationPlayState = 'running';
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html>
