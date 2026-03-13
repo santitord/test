@@ -113,9 +113,20 @@
                 </div>
                 <div class="hidden md:flex items-center space-x-4">
                     <span class="text-sm text-muted">+54 9 11 1234-5678</span>
-                    <button class="btn-outline px-6 py-2 rounded-full text-sm">
-                        WhatsApp
-                    </button>
+                    <button class="btn-outline px-6 py-2 rounded-full text-sm">WhatsApp</button>
+                </div>
+                <button id="menuBtn" onclick="toggleMobileMenu()" class="md:hidden flex flex-col justify-center items-center w-10 h-10 space-y-1.5 focus:outline-none">
+                    <span class="block w-6 h-0.5 bg-acid transition-all duration-300"></span>
+                    <span class="block w-6 h-0.5 bg-acid transition-all duration-300"></span>
+                    <span class="block w-6 h-0.5 bg-acid transition-all duration-300"></span>
+                </button>
+            </div>
+            <div id="mobileMenu" class="md:hidden hidden pb-4">
+                <div class="flex flex-col space-y-1">
+                    <a href="#catalogo" onclick="toggleMobileMenu()" class="text-muted hover:text-acid transition-colors font-medium py-3 border-b border-white/5">Catálogo</a>
+                    <a href="#reserva" onclick="toggleMobileMenu()" class="text-muted hover:text-acid transition-colors font-medium py-3 border-b border-white/5">Reserva</a>
+                    <a href="#contacto" onclick="toggleMobileMenu()" class="text-muted hover:text-acid transition-colors font-medium py-3 border-b border-white/5">Contacto</a>
+                    <span class="text-sm text-muted pt-3">+54 9 11 1234-5678</span>
                 </div>
             </div>
         </div>
@@ -189,9 +200,9 @@
                         <span>✓ Dual Card Slots</span>
                     </div>
                     
-                    <a href="https://link.mercadopago.com.ar/santiagotordelli" target="_blank" class="btn-acid w-full py-3 rounded-lg font-semibold text-center">
+                    <button class="btn-acid w-full py-3 rounded-lg font-semibold" onclick="openReservationModal('Sony A7IV', 2500)">
                         Reservar y Pagar Seña
-                    </a>
+                    </button>
                 </div>
 
                 <!-- Kit Luces Aperture Card -->
@@ -311,7 +322,7 @@
                             </div>
                             <div>
                                 <span class="text-muted text-sm">Email</span>
-                                <p class="text-white font-semibold">hola@studiorental.com</p>
+                                <p class="text-white font-semibold"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="89e1e6e5e8c9fafdfcede0e6fbece7fde8e5a7eae6e4">[email&#160;protected]</a></p>
                             </div>
                         </div>
                         <div class="flex items-center space-x-4">
@@ -349,6 +360,9 @@
                         <button type="submit" class="btn-acid px-8 py-3 rounded-lg font-semibold w-full">
                             Enviar Mensaje
                         </button>
+                        <div id="contactSuccess" class="hidden bg-acid/10 border border-acid/30 rounded-lg p-4 text-acid text-sm text-center">
+                            ✅ ¡Gracias por tu consulta! Nos pondremos en contacto a la brevedad.
+                        </div>
                     </form>
                 </div>
             </div>
@@ -387,7 +401,7 @@
                 </div>
             </div>
             <div class="border-t border-ink/30 mt-8 pt-8 text-center text-muted">
-                <p>&copy; 2024 Studio Rental. Todos los derechos reservados.</p>
+                <p>&copy; 2026 Studio Rental. Todos los derechos reservados.</p>
             </div>
         </div>
     </footer>
@@ -428,6 +442,8 @@
                     </div>
                 </div>
                 
+                <div id="dateError" class="hidden text-red-400 text-sm">⚠️ La fecha de fin debe ser posterior a la de inicio.</div>
+                
                 <div class="bg-white/5 rounded-lg p-4">
                     <div class="flex justify-between items-center mb-2">
                         <span class="text-muted text-sm">Total</span>
@@ -439,6 +455,9 @@
                     </div>
                 </div>
                 
+                <div id="depositNotice" class="bg-acid/10 border border-acid/30 rounded-lg p-3 text-sm text-acid hidden">
+                    💡 Al hacer clic en "Pagar Seña", ingresá el monto exacto de la seña en Mercado Pago.
+                </div>
                 <div class="grid grid-cols-2 gap-4">
                     <button type="button" onclick="closeReservationModal()" class="btn-outline px-4 py-3 rounded-lg">
                         Cancelar
@@ -453,27 +472,33 @@
 
     <!-- JavaScript -->
     <script>
-        // Modal Functions
+        // ── Mobile Menu ──────────────────────────────────────────────
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // ── Modal ─────────────────────────────────────────────────────
         let currentProduct = '';
         let currentPrice = 0;
 
         function openReservationModal(product, price) {
             currentProduct = product;
             currentPrice = price;
-            
+
             document.getElementById('modalProductName').textContent = product;
             document.getElementById('modalProductPrice').textContent = `$${price.toLocaleString()}`;
-            
-            // Set default dates
+
+            // Fechas por defecto: hoy y mañana
             const today = new Date();
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
-            
+
             document.getElementById('startDateInput').value = today.toISOString().split('T')[0];
             document.getElementById('endDateInput').value = tomorrow.toISOString().split('T')[0];
-            
+
             updateReservation();
-            
+
             const modal = document.getElementById('reservationModal');
             modal.classList.remove('opacity-0', 'pointer-events-none');
             modal.classList.add('opacity-100', 'pointer-events-auto');
@@ -487,65 +512,96 @@
             document.body.style.overflow = '';
         }
 
+        // Cerrar modal al hacer click fuera
+        document.getElementById('reservationModal').addEventListener('click', function(e) {
+            if (e.target === this) closeReservationModal();
+        });
+
         function updateReservation() {
-            const days = parseInt(document.getElementById('daysInput').value) || 1;
+            const daysInput = document.getElementById('daysInput');
+            const startVal = document.getElementById('startDateInput').value;
+            const endVal = document.getElementById('endDateInput').value;
+            const errorEl = document.getElementById('dateError');
+            const noticeEl = document.getElementById('depositNotice');
+            const payBtn = document.getElementById('paymentLink');
+
+            // Validación de fechas
+            if (startVal && endVal) {
+                const start = new Date(startVal);
+                const end = new Date(endVal);
+                if (end <= start) {
+                    errorEl.classList.remove('hidden');
+                    payBtn.classList.add('opacity-50', 'pointer-events-none');
+                    return;
+                } else {
+                    errorEl.classList.add('hidden');
+                    payBtn.classList.remove('opacity-50', 'pointer-events-none');
+                    const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
+                    daysInput.value = diffDays;
+                }
+            }
+
+            const days = parseInt(daysInput.value) || 1;
             const total = days * currentPrice;
-            const deposit = total * 0.3;
-            
+            const deposit = Math.round(total * 0.3);
+
             document.getElementById('modalTotal').textContent = `$${total.toLocaleString()}`;
             document.getElementById('modalDeposit').textContent = `$${deposit.toLocaleString()}`;
-            
-            // Generate Mercado Pago link
-            const paymentUrl = "https://link.mercadopago.com.ar/santiagotordelli";
-document.getElementById('paymentLink').href = paymentUrl;
+
+            // Mostrar aviso con el monto exacto a ingresar en MP
+            noticeEl.innerHTML = `💡 Al abrir Mercado Pago, ingresá el monto de la seña: <strong>$${deposit.toLocaleString()}</strong>`;
+            noticeEl.classList.remove('hidden');
+
+            // Link fijo a tu perfil de MP
+            payBtn.href = 'https://link.mercadopago.com.ar/santiagotordelli';
         }
 
-        // Contact Form
+        // Sincronizar días cuando cambian las fechas
+        document.getElementById('startDateInput').addEventListener('change', updateReservation);
+        document.getElementById('endDateInput').addEventListener('change', updateReservation);
+        document.getElementById('daysInput').addEventListener('change', function() {
+            const days = Math.max(1, parseInt(this.value) || 1);
+            this.value = days;
+            // Actualizar fecha de fin en base a días
+            const start = new Date(document.getElementById('startDateInput').value);
+            if (!isNaN(start)) {
+                const end = new Date(start);
+                end.setDate(end.getDate() + days);
+                document.getElementById('endDateInput').value = end.toISOString().split('T')[0];
+            }
+            updateReservation();
+        });
+
+        // ── Formulario de Contacto ────────────────────────────────────
         document.getElementById('contactForm').addEventListener('submit', function(e) {
             e.preventDefault();
-            
-            const formData = new FormData(this);
-            const data = Object.fromEntries(formData);
-            
-            // Simulate form submission
-            console.log('Formulario de contacto:', data);
-            
-            // Show success message
-            alert('¡Gracias por tu consulta! Nos pondremos en contacto a la brevedad.');
-            
-            // Reset form
-            this.reset();
+            const btn = this.querySelector('button[type="submit"]');
+            const successMsg = document.getElementById('contactSuccess');
+
+            btn.disabled = true;
+            btn.textContent = 'Enviando...';
+
+            // Simulación de envío (reemplazar con fetch a tu backend o servicio)
+            setTimeout(() => {
+                successMsg.classList.remove('hidden');
+                this.reset();
+                btn.disabled = false;
+                btn.textContent = 'Enviar Mensaje';
+                setTimeout(() => successMsg.classList.add('hidden'), 5000);
+            }, 800);
         });
 
-        // Smooth scrolling for navigation
+        // ── Smooth Scroll ─────────────────────────────────────────────
         document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                if (href === '#') return;
                 e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
+                const target = document.querySelector(href);
                 if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'start'
-                    });
+                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 }
             });
-        });
-
-        // Auto-update days when dates change
-        document.getElementById('startDateInput').addEventListener('change', function() {
-            const start = new Date(this.value);
-            const end = new Date(document.getElementById('endDateInput').value);
-            const days = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
-            document.getElementById('daysInput').value = days;
-            updateReservation();
-        });
-
-        document.getElementById('endDateInput').addEventListener('change', function() {
-            const start = new Date(document.getElementById('startDateInput').value);
-            const end = new Date(this.value);
-            const days = Math.max(1, Math.ceil((end - start) / (1000 * 60 * 60 * 24)));
-            document.getElementById('daysInput').value = days;
-            updateReservation();
         });
     </script>
 </body>
