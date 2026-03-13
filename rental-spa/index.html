@@ -189,7 +189,7 @@
                         <span>✓ Dual Card Slots</span>
                     </div>
                     
-                    <a href="https://mpago.la/2dcXVEx" target="_blank" class="btn-acid w-full py-3 rounded-lg font-semibold text-center">
+                    <a href="https://link.mercadopago.com.ar/santiagotordelli" target="_blank" class="btn-acid w-full py-3 rounded-lg font-semibold text-center">
                         Reservar y Pagar Seña
                     </a>
                 </div>
@@ -496,10 +496,8 @@
             document.getElementById('modalDeposit').textContent = `$${deposit.toLocaleString()}`;
             
             // Generate Mercado Pago link
-            const depositAmount = Math.round(deposit);
-            const productName = encodeURIComponent(currentProduct);
-            const paymentUrl = `https://mpago.la/${depositAmount}?product=${productName}&days=${days}`;
-            document.getElementById('paymentLink').href = paymentUrl;
+            const paymentUrl = "https://link.mercadopago.com.ar/santiagotordelli";
+document.getElementById('paymentLink').href = paymentUrl;
         }
 
         // Contact Form
