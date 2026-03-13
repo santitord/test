@@ -425,6 +425,9 @@
                 </div>
             </div>
             
+            <!-- Estado de disponibilidad -->
+            <div id="availabilityStatus" class="hidden mb-4 px-4 py-3 rounded-lg text-sm font-medium text-center"></div>
+
             <form id="reservationForm" class="space-y-4">
                 <div>
                     <label class="block text-sm font-medium text-muted mb-2">Días de alquiler</label>
@@ -472,24 +475,78 @@
 
     <!-- JavaScript -->
     <script>
-        // ── Mobile Menu ──────────────────────────────────────────────
+        // ── Config ────────────────────────────────────────────────────
+        const SHEETS_API = 'https://script.google.com/macros/s/AKfycbwTPu_o9IorS_PrhHjQJMXSpBvi45bW4BmT7UCc_ZoYMh_2cTD4dbEAqoiyQ646H7o/exec';
+
+        // ── Mobile Menu ───────────────────────────────────────────────
         function toggleMobileMenu() {
-            const menu = document.getElementById('mobileMenu');
-            menu.classList.toggle('hidden');
+            document.getElementById('mobileMenu').classList.toggle('hidden');
         }
 
-        // ── Modal ─────────────────────────────────────────────────────
+        // ── Estado global ─────────────────────────────────────────────
         let currentProduct = '';
         let currentPrice = 0;
+        let reservasCache = null; // cache de reservas para no consultar de más
 
+        // ── Cargar reservas desde Google Sheets ───────────────────────
+        async function fetchReservas() {
+            if (reservasCache) return reservasCache;
+            try {
+                const res = await fetch(SHEETS_API);
+                const data = await res.json();
+                // Normalizar nombres de equipo a minúsculas para comparar
+                reservasCache = data.filter(r => r.estado === 'confirmada' || r.estado === 'pendiente');
+                return reservasCache;
+            } catch (e) {
+                console.error('Error al consultar disponibilidad:', e);
+                return [];
+            }
+        }
+
+        // ── Verificar si hay conflicto de fechas ──────────────────────
+        function hayConflicto(reservas, equipo, startDate, endDate) {
+            return reservas.some(r => {
+                if (r.equipo.toLowerCase() !== equipo.toLowerCase()) return false;
+                const rStart = new Date(r.fecha_inicio);
+                const rEnd = new Date(r.fecha_fin);
+                // Hay overlap si las fechas se solapan
+                return startDate < rEnd && endDate > rStart;
+            });
+        }
+
+        // ── Mostrar estado de disponibilidad ─────────────────────────
+        function setAvailabilityUI(estado) {
+            const el = document.getElementById('availabilityStatus');
+            const payBtn = document.getElementById('paymentLink');
+            el.classList.remove('hidden', 'bg-green-500/20', 'text-green-400', 'border', 'border-green-500/30',
+                                'bg-red-500/20', 'text-red-400', 'border-red-500/30',
+                                'bg-yellow-500/20', 'text-yellow-400', 'border-yellow-500/30');
+
+            if (estado === 'disponible') {
+                el.classList.add('bg-green-500/20', 'text-green-400', 'border', 'border-green-500/30');
+                el.textContent = '✅ Equipo disponible para esas fechas';
+                payBtn.classList.remove('opacity-50', 'pointer-events-none');
+            } else if (estado === 'ocupado') {
+                el.classList.add('bg-red-500/20', 'text-red-400', 'border', 'border-red-500/30');
+                el.textContent = '❌ El equipo ya está reservado en esas fechas';
+                payBtn.classList.add('opacity-50', 'pointer-events-none');
+            } else if (estado === 'cargando') {
+                el.classList.add('bg-yellow-500/20', 'text-yellow-400', 'border', 'border-yellow-500/30');
+                el.textContent = '⏳ Verificando disponibilidad...';
+                payBtn.classList.add('opacity-50', 'pointer-events-none');
+            }
+        }
+
+        // ── Abrir modal ───────────────────────────────────────────────
         function openReservationModal(product, price) {
             currentProduct = product;
             currentPrice = price;
+            reservasCache = null; // refrescar al abrir
 
             document.getElementById('modalProductName').textContent = product;
             document.getElementById('modalProductPrice').textContent = `$${price.toLocaleString()}`;
+            document.getElementById('availabilityStatus').classList.add('hidden');
 
-            // Fechas por defecto: hoy y mañana
             const today = new Date();
             const tomorrow = new Date(today);
             tomorrow.setDate(tomorrow.getDate() + 1);
@@ -512,12 +569,13 @@
             document.body.style.overflow = '';
         }
 
-        // Cerrar modal al hacer click fuera
         document.getElementById('reservationModal').addEventListener('click', function(e) {
             if (e.target === this) closeReservationModal();
         });
 
-        function updateReservation() {
+        // ── Actualizar cálculos y verificar disponibilidad ────────────
+        let checkTimeout = null;
+        async function updateReservation() {
             const daysInput = document.getElementById('daysInput');
             const startVal = document.getElementById('startDateInput').value;
             const endVal = document.getElementById('endDateInput').value;
@@ -532,12 +590,21 @@
                 if (end <= start) {
                     errorEl.classList.remove('hidden');
                     payBtn.classList.add('opacity-50', 'pointer-events-none');
+                    document.getElementById('availabilityStatus').classList.add('hidden');
                     return;
                 } else {
                     errorEl.classList.add('hidden');
-                    payBtn.classList.remove('opacity-50', 'pointer-events-none');
                     const diffDays = Math.ceil((end - start) / (1000 * 60 * 60 * 24));
                     daysInput.value = diffDays;
+
+                    // Verificar disponibilidad con debounce
+                    setAvailabilityUI('cargando');
+                    clearTimeout(checkTimeout);
+                    checkTimeout = setTimeout(async () => {
+                        const reservas = await fetchReservas();
+                        const ocupado = hayConflicto(reservas, currentProduct, start, end);
+                        setAvailabilityUI(ocupado ? 'ocupado' : 'disponible');
+                    }, 500);
                 }
             }
 
@@ -548,21 +615,16 @@
             document.getElementById('modalTotal').textContent = `$${total.toLocaleString()}`;
             document.getElementById('modalDeposit').textContent = `$${deposit.toLocaleString()}`;
 
-            // Mostrar aviso con el monto exacto a ingresar en MP
             noticeEl.innerHTML = `💡 Al abrir Mercado Pago, ingresá el monto de la seña: <strong>$${deposit.toLocaleString()}</strong>`;
             noticeEl.classList.remove('hidden');
-
-            // Link fijo a tu perfil de MP
             payBtn.href = 'https://link.mercadopago.com.ar/santiagotordelli';
         }
 
-        // Sincronizar días cuando cambian las fechas
         document.getElementById('startDateInput').addEventListener('change', updateReservation);
         document.getElementById('endDateInput').addEventListener('change', updateReservation);
         document.getElementById('daysInput').addEventListener('change', function() {
             const days = Math.max(1, parseInt(this.value) || 1);
             this.value = days;
-            // Actualizar fecha de fin en base a días
             const start = new Date(document.getElementById('startDateInput').value);
             if (!isNaN(start)) {
                 const end = new Date(start);
@@ -581,7 +643,6 @@
             btn.disabled = true;
             btn.textContent = 'Enviando...';
 
-            // Simulación de envío (reemplazar con fetch a tu backend o servicio)
             setTimeout(() => {
                 successMsg.classList.remove('hidden');
                 this.reset();
@@ -598,9 +659,7 @@
                 if (href === '#') return;
                 e.preventDefault();
                 const target = document.querySelector(href);
-                if (target) {
-                    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
             });
         });
     </script>
